@@ -119,8 +119,18 @@ public class MLKitBarcodeScanner extends CordovaPlugin {
     JSONObject config = args.getJSONObject(0);
     Intent intent = new Intent(context, CaptureActivity.class);
     intent.putExtra("BarcodeFormats", config.optInt("barcodeFormats", 1234));
-    intent.putExtra("DetectorSize", config.optDouble("detectorSize", 0.5));
+    intent.putExtra("DetectorWidth", config.optDouble("detectorWidth", 0.5));
+    intent.putExtra("DetectorHeight", config.optDouble("detectorHeight", 0.5));
     intent.putExtra("RotateCamera", config.optBoolean("rotateCamera", false));
+    intent.putExtra("DrawFocusRect", config.optBoolean("drawFocusRect", true));
+    intent.putExtra("FocusRectColor", config.optString("focusRectColor", "#FFFFFF"));
+    intent.putExtra("FocusRectBorderRadius", config.optInt("focusRectBorderRadius", 100));
+    intent.putExtra("FocusRectBorderThickness", config.optInt("focusRectBorderThickness", 5));
+    intent.putExtra("DrawFocusLine", config.optBoolean("drawFocusLine", true));
+    intent.putExtra("FocusLineColor", config.optString("focusLineColor", "#FFFFFF"));
+    intent.putExtra("FocusLineThickness", config.optInt("focusLineThickness", 5));
+    intent.putExtra("DrawFocusBackground", config.optBoolean("drawFocusBackground", true));
+    intent.putExtra("FocusBackgroundColor", config.optString("focusBackgroundColor", "#CCFFFFFF"));
 
     _BeepOnSuccess = config.optBoolean("beepOnSuccess", false);
     _VibrateOnSuccess = config.optBoolean("vibrateOnSuccess", false);

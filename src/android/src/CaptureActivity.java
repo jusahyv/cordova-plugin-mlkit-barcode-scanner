@@ -12,6 +12,7 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.RectF;
+import android.graphics.Path;
 import android.os.Bundle;
 
 import android.view.GestureDetector;
@@ -61,7 +62,17 @@ import java.util.concurrent.Executors;
 public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.Callback {
 
   public Integer BarcodeFormats;
-  public double DetectorSize = .5;
+  public double DetectorHeight = .5;
+  public double DetectorWidth = .5;
+  public boolean DrawFocusRect = true;
+  public String FocusRectColor = "#FFFFFF";
+  public int FocusRectBorderThickness = 5;
+  public int FocusRectBorderRadius = 100;
+  public boolean DrawFocusLine = true;
+  public String FocusLineColor = "#FFFFFF";
+  public int FocusLineThickness = 5;
+  public boolean DrawFocusBackground = true;
+  public String FocusBackgroundColor = "#CCFFFFFF";
 
   public static final String BarcodeFormat = "MLKitBarcodeFormat";
   public static final String BarcodeType = "MLKitBarcodeType";
@@ -97,11 +108,26 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
 
     // read parameters from the intent used to launch the activity.
     BarcodeFormats = getIntent().getIntExtra("BarcodeFormats", 1234);
-    DetectorSize = getIntent().getDoubleExtra("DetectorSize", .5);
+    DetectorWidth = getIntent().getDoubleExtra("DetectorWidth", DetectorWidth);
+    DetectorHeight = getIntent().getDoubleExtra("DetectorHeight", DetectorHeight);
 
-    if (DetectorSize <= 0 || DetectorSize >= 1) { // setting boundary detectorSize must be between 0 to 1.
-      DetectorSize = 0.5;
+    if (DetectorWidth <= 0 || DetectorWidth >= 1) { // setting boundary detectorSize must be between 0 to 1.
+      DetectorWidth = 0.5;
     }
+
+    if (DetectorHeight <= 0 || DetectorHeight >= 1) { // setting boundary detectorSize must be between 0 to 1.
+      DetectorHeight = 0.5;
+    }
+
+    DrawFocusRect = getIntent().getBooleanExtra("DrawFocusRect", DrawFocusRect);
+    FocusRectColor = getIntent().getStringExtra("FocusRectColor");
+    FocusRectBorderRadius = getIntent().getIntExtra("FocusRectBorderRadius", FocusRectBorderRadius);
+    FocusRectBorderThickness = getIntent().getIntExtra("FocusRectBorderThickness", FocusRectBorderThickness);
+    DrawFocusLine = getIntent().getBooleanExtra("DrawFocusLine", DrawFocusLine);
+    FocusLineColor = getIntent().getStringExtra("FocusLineColor");
+    FocusLineThickness = getIntent().getIntExtra("FocusLineThickness", FocusLineThickness);
+    DrawFocusBackground = getIntent().getBooleanExtra("DrawFocusBackground", DrawFocusBackground);
+    FocusBackgroundColor = getIntent().getStringExtra("FocusBackgroundColor");
 
     int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
 
@@ -204,7 +230,7 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
 
     if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
       startCamera();
-      DrawFocusRect(Color.parseColor("#FFFFFF"));
+      DrawFocus();
       return;
     }
 
@@ -227,7 +253,7 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
 
   @Override
   public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-    DrawFocusRect(Color.parseColor("#FFFFFF"));
+    DrawFocus();
   }
 
   @Override
@@ -326,20 +352,18 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
         int height = bmp.getHeight();
         int width = bmp.getWidth();
 
-        int left, right, top, bottom, diameter, boxHeight, boxWidth;
+        int left, right, top, bottom, diameterWidth, diameterHeight, boxHeight, boxWidth;
 
-        diameter = width;
-        if (height < width) {
-          diameter = height;
-        }
+        diameterWidth = width;
+        diameterHeight = height;
+        
+        diameterWidth -= (int) ((1 - DetectorWidth) * diameterWidth);
+        diameterHeight -= (int) ((1 - DetectorHeight) * diameterHeight);
 
-        int offset = (int) ((1 - DetectorSize) * diameter);
-        diameter -= offset;
-
-        left = width / 2 - diameter / 2;
-        top = height / 2 - diameter / 2;
-        right = width / 2 + diameter / 2;
-        bottom = height / 2 + diameter / 2;
+        left = width / 2 - diameterWidth / 2;
+        top = height / 2 - diameterHeight / 2;
+        right = width / 2 + diameterWidth / 2;
+        bottom = height / 2 + diameterHeight / 2;
 
         boxHeight = bottom - top;
         boxWidth = right - left;
@@ -398,49 +422,85 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
 
     camera = cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, imageAnalysis, preview);
   }
-
-  /**
-   * For drawing the rectangular box
-   */
-  private void DrawFocusRect(int color) {
-
+  
+  private void DrawFocus() {
     if (mCameraView != null) {
-      int height = mCameraView.getHeight();
-      int width = mCameraView.getWidth();
-
-      int left, right, top, bottom, diameter;
-
-      diameter = width;
-      if (height < width) {
-        diameter = height;
-      }
-
-      int offset = (int) ((1 - DetectorSize) * diameter);
-      diameter -= offset;
-
       canvas = holder.lockCanvas();
       canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-      // border's properties
-      paint = new Paint();
-      paint.setStyle(Paint.Style.STROKE);
-      paint.setColor(color);
-      paint.setStrokeWidth(5);
+      
+      if(DrawFocusLine) {
+        DrawFocusLine();
+      }
 
-      left = width / 2 - diameter / 2;
-      top = height / 2 - diameter / 2;
-      right = width / 2 + diameter / 2;
-      bottom = height / 2 + diameter / 2;
+      if(DrawFocusRect) {
+        DrawFocusRect();
+      }
 
-      // Changing the value of x in diameter/x will change the size of the box ;
-      // inversely proportionate to x
-      if (DetectorSize <= 0.3) {
-        canvas.drawRect(new RectF(left, top, right, bottom), paint);
-      } else {
-        canvas.drawRoundRect(new RectF(left, top, right, bottom), 100, 100, paint);
+      if(DrawFocusBackground) {
+        DrawFocusBackground();
       }
 
       holder.unlockCanvasAndPost(canvas);
     }
+  }
 
+  /**
+   * For drawing the rectangular box
+   */
+  private void DrawFocusRect() {
+   // border's properties
+    paint = new Paint();
+    paint.setStyle(Paint.Style.STROKE);
+    paint.setColor(Color.parseColor(FocusRectColor));
+    paint.setStrokeWidth(FocusRectBorderThickness);
+    
+    // Changing the value of x in diameter/x will change the size of the box ;
+    // inversely proportionate to x
+    canvas.drawRoundRect(calculateRectF(), FocusRectBorderRadius, FocusRectBorderRadius, paint);
+  }
+  
+  private RectF calculateRectF() {
+    int height = mCameraView.getHeight();
+    int width = mCameraView.getWidth();
+
+    int left, right, top, bottom, diameterWidth, diameterHeight;
+
+    diameterWidth = width - (int) ((1 - DetectorWidth) * width);
+    diameterHeight = height - (int) ((1 - DetectorHeight) * height);
+    
+    left = width / 2 - diameterWidth / 2;
+    top = height / 2 - diameterHeight / 2;
+    right = width / 2 + diameterWidth / 2;
+    bottom = height / 2 + diameterHeight / 2;
+    
+    return new RectF(left, top, right, bottom);
+  }
+
+  private void DrawFocusLine() {
+    int height = mCameraView.getHeight();
+    int width = mCameraView.getWidth();
+
+    int left, right, top, bottom, diameterWidth;
+
+    diameterWidth = width - (int) ((1 - DetectorWidth) * width);
+    
+    // border's properties
+    paint = new Paint();
+    paint.setColor(Color.parseColor(FocusLineColor));
+    paint.setStrokeWidth(FocusLineThickness);
+
+    left = width / 2 - diameterWidth / 2;
+    top = height / 2;
+    right = width / 2 + diameterWidth / 2;
+    bottom = height / 2;
+
+    canvas.drawLine(left, top, right, bottom, paint);
+  }
+
+  private void DrawFocusBackground() {
+    Path path = new Path();
+    path.addRoundRect(calculateRectF(), FocusRectBorderRadius, FocusRectBorderRadius, Path.Direction.CCW);
+    canvas.clipOutPath(path);
+    canvas.drawColor(Color.parseColor(FocusBackgroundColor));
   }
 }
