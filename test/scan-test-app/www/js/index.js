@@ -21,6 +21,24 @@
 // See https://cordova.apache.org/docs/en/latest/cordova/events/events.html#deviceready
 document.addEventListener('deviceready', onDeviceReady, false);
 
+const options = {
+  beepOnSuccess: false,
+  vibrateOnSuccess: false,
+  detectorSize: 0.6,
+  detectorWidth: 0.9,
+  detectorHeight: 0.1,
+  drawFocusRect: true,
+  focusRectColor: "#FFFFFF",
+  focusRectBorderRadius: 10,
+  focusRectBorderThickness: 5,
+  drawFocusLine: false,
+  focusLineColor: "#ff2d37",
+  focusLineThickness: 2,
+  drawFocusBackground: false,
+  focusBackgroundColor: "#66FFFFFF",
+  rotateCamera: false,
+};
+
 function onSuccess(result) {
   const node = document.createElement('div');
   node.textContent = `${result.text} (${result.format}/${result.type})`;
@@ -29,18 +47,38 @@ function onSuccess(result) {
 
 function scan() {
   const formData = new FormData(document.querySelector('form'));
-  const options = {};
-
+  
   for (const pair of formData.entries()) {
     const key = pair[0];
     const value = pair[1];
-    options[key] = value === 'true';
+    options[key] = value;
   }
-
+  
   cordova.plugins.mlkit.barcodeScanner.scan(options, onSuccess, console.error);
 }
 
 function onDeviceReady() {
   console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
   document.getElementById('scan').onclick = scan;
+
+  for (const key in options) {
+    const element =  document.getElementById(key);
+    if (element) {
+      if (element.tagName === "INPUT" && element.type === "range") {
+        element.addEventListener("input", updateTextInput)
+        element.nextElementSibling.value=options[key]
+        element.value = options[key]
+      }
+      else if (element.tagName === "INPUT" && element.type === "checkbox") {
+        element.checked = options[key]
+      }
+      else {
+        element.value = options[key]
+      }
+    }
+  }
+}
+
+function updateTextInput() {
+  document.getElementById(this.id).nextElementSibling.value=this.value;
 }

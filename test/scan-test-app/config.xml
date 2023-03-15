@@ -26,16 +26,7 @@
       target="AndroidManifest.xml">
       <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     </config-file>
-    <icon src="res/android/mipmap-mdpi/ic_launcher.png"
-      density="mdpi" />
-    <icon src="res/android/mipmap-hdpi/ic_launcher.png"
-      density="hdpi" />
-    <icon src="res/android/mipmap-xhdpi/ic_launcher.png"
-      density="xhdpi" />
-    <icon src="res/android/mipmap-xxhdpi/ic_launcher.png"
-      density="xxhdpi" />
-    <icon src="res/android/mipmap-xxxhdpi/ic_launcher.png"
-      density="xxxhdpi" />
+
   </platform>
   <platform name="ios">
     <allow-intent href="itms:*" />

@@ -22,13 +22,81 @@
               <form>
                 <h4>Scan options</h4>
                 <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" id="beepOnSuccessSwitch" name="beepOnSuccess" value="true">
-                  <label class="form-check-label" for="beepOnSuccessSwitch">Beep on success</label>
+                  <input class="form-check-input" type="checkbox" role="switch" id="beepOnSuccess" name="beepOnSuccess" value="true">
+                  <label class="form-check-label" for="beepOnSuccess">Beep on success</label>
                 </div>
                 <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" id="vibrateOnSuccessSwitch" name="vibrateOnSuccess" value="true">
-                  <label class="form-check-label" for="vibrateOnSuccessSwitch">Vibrate on success</label>
+                  <input class="form-check-input" type="checkbox" role="switch" id="vibrateOnSuccess" name="vibrateOnSuccess" value="true">
+                  <label class="form-check-label" for="vibrateOnSuccess">Vibrate on success</label>
                 </div>
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="rotateCamera" name="rotateCamera" value="true">
+                  <label class="form-check-label" for="rotateCamera">Rotate Camera</label>
+                </div>
+                <fieldset>
+                  <legend>Size:</legend>
+                  <div class="form-range">
+                    <label class="form-range-label" for="detectorSize">Size (IOS)</label>
+                    <input class="form-range-input" type="range" min="0" max="1" step="0.1" id="detectorSize" name="detectorSize">
+                    <output>0.5</output>
+                  </div>
+                  <div class="form-range">
+                    <label class="form-range-label" for="detectorHeight">Height (Android)</label>
+                    <input class="form-range-input" type="range" min="0" max="1" step="0.1" id="detectorHeight" name="detectorHeight">
+                    <output>0.5</output>
+                  </div>
+                  <div class="form-range">
+                    <label class="form-range-label" for="detectorWidth">Width (Android)</label>
+                    <input class="form-range-input" type="range" min="0" max="1" step="0.1" id="detectorWidth" name="detectorWidth">
+                    <output>0.5</output>
+                  </div>
+                </fieldset>
+                <h4>Android only options</h4>
+                <fieldset>
+                  <legend>Rectangle Outline:</legend>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="drawFocusRect" name="drawFocusRect" value="true">
+                    <label class="form-check-label" for="drawFocusRect">Draw</label>
+                  </div>
+                  <div class="form-text">
+                    <label class="form-text-label" for="focusRectColor">Color</label>
+                    <input class="form-text-input" type="text" id="focusRectColor" name="focusRectColor">
+                  </div>
+                  <div class="form-number">
+                    <label class="form-number-label" for="focusRectBorderThickness">Thickness</label>
+                    <input class="form-number-input" type="number" id="focusRectBorderThickness" name="focusRectBorderThickness">
+                  </div>
+                  <div class="form-number">
+                    <label class="form-number-label" for="focusRectBorderRadius">Radius</label>
+                    <input class="form-number-input" type="number" id="focusRectBorderRadius" name="focusRectBorderRadius">
+                  </div>
+                </fieldset>
+                <fieldset>
+                  <legend>Center Line:</legend>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="drawFocusLine" name="drawFocusLine" value="true">
+                    <label class="form-check-label" for="drawFocusLine">Draw</label>
+                  </div>
+                  <div class="form-text">
+                    <label class="form-text-label" for="focusLineColor">Color</label>
+                    <input class="form-text-input" type="text" id="focusLineColor" name="focusLineColor">
+                  </div>
+                  <div class="form-number">
+                    <label class="form-number-label" for="focusLineThickness">Thickness</label>
+                    <input class="form-number-input" type="number" id="focusLineThickness" name="focusLineThickness">
+                  </div>
+                </fieldset>
+                <fieldset>
+                  <legend>Background:</legend>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="drawFocusBackground" name="drawFocusBackground" value="true">
+                    <label class="form-check-label" for="drawFocusBackground">Draw</label>
+                  </div>
+                  <div class="form-text">
+                    <label class="form-text-label" for="focusBackgroundColor">Color</label>
+                    <input class="form-text-input" type="text" id="focusBackgroundColor" name="focusBackgroundColor">
+                  </div>
+                </fieldset>
               </form>
             </div>
             <div class="col-12">
