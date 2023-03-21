@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-mlkit-barcode-scanner",
-  "version": "3.0.7",
+  "version": "3.0.8",
   "description": "Google MLKit Vision Barcode Scanner Plugin",
   "cordova": {
     "id": "cordova-plugin-mlkit-barcode-scanner",
@@ -14,10 +14,9 @@
     "cordova-ios",
     "cordova-android"
   ],
-  "author": "Florian Biebel",
+  "author": "Nadine Seibel",
   "license": "MIT",
   "main": "www/BarcodeScanner.contract.js",
-  "prettier": "@teckel.ts-internal/prettier-config",
   "engines": {
     "node": ">=10.0.0"
   },
@@ -39,15 +38,9 @@
     "url": "https://github.com/MobisysGmbH/cordova-plugin-mlkit-barcode-scanner.git"
   },
   "homepage": "https://github.com/MobisysGmbH/cordova-plugin-mlkit-barcode-scanner#readme",
-  "publishConfig": {
-    "registry": "https://pkgs.dev.azure.com/mobisysgmbh/_packaging/mobisys/npm/registry/"
-  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "20.0.0",
     "@rollup/plugin-node-resolve": "13.0.4",
-    "@teckel.ts-internal/eslint-config": "3.0.0",
-    "@teckel.ts-internal/prettier-config": "1.0.0",
-    "@teckel.ts-internal/ts-config": "2.0.1",
     "@types/cordova": "0.0.34",
     "@types/node": "16.7.1",
     "eslint": "7.32.0",
