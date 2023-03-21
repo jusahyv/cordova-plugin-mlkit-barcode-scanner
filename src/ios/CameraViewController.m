@@ -353,10 +353,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     double focus_y = (touchPoint.y+66)/self.previewLayer.frame.size.height;
 
     NSError *error;
-    NSArray *devices = [AVCaptureDeviceDiscoverySession
-                        discoverySessionWithDeviceTypes:captureDeviceType
-                        mediaType:AVMediaTypeVideo
-                        position:AVCaptureDevicePositionUnspecified];
+    NSArray *devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo);
     for (AVCaptureDevice *device in devices){
         NSLog(@"Device name: %@", [device localizedName]);
         if ([device hasMediaType:AVMediaTypeVideo]) {
@@ -486,10 +483,7 @@ static inline double radians (double degrees) {return degrees * M_PI/180;}
 }
 
 - (AVCaptureDeviceInput *)captureDeviceInputForPosition:(AVCaptureDevicePosition)desiredPosition {
-    for (AVCaptureDevice *device in [AVCaptureDeviceDiscoverySession
-                                     discoverySessionWithDeviceTypes:captureDeviceType
-                                     mediaType:AVMediaTypeVideo
-                                     position:AVCaptureDevicePositionUnspecified]) {
+    for (AVCaptureDevice *device in AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)) {
         if (device.position == desiredPosition) {
             NSError *error = nil;
             AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device
