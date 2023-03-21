@@ -27,6 +27,7 @@
 @property(nonatomic, strong) UIImageView *imageView;
 
 @property(nonatomic, strong) AVCaptureSession *session;
+@property(nonatomic, strong) DiscoverySession *discoverySession;
 @property(nonatomic, strong) AVCaptureVideoDataOutput *videoDataOutput;
 @property(nonatomic, strong) dispatch_queue_t videoDataOutputQueue;
 @property(nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
@@ -76,6 +77,8 @@
 
     _videoDataOutputQueue = dispatch_queue_create("VideoDataOutputQueue",
                                                   DISPATCH_QUEUE_SERIAL);
+
+    self.discoverySession = AVCaptureDevice.DiscoverySession.init(deviceTypes: [AVCaptureDeviceType.builtInWideAngleCamera], mediaType:AVMediaTypeVideo, position:AVCaptureDevicePositionUnspecified)
 
     [self updateCameraSelection];
 
@@ -353,8 +356,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     double focus_y = (touchPoint.y+66)/self.previewLayer.frame.size.height;
 
     NSError *error;
-    NSArray *devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo);
-    for (AVCaptureDevice *device in devices){
+    for (AVCaptureDevice *device in self.discoverySession.devices){
         NSLog(@"Device name: %@", [device localizedName]);
         if ([device hasMediaType:AVMediaTypeVideo]) {
             if ([device position] == AVCaptureDevicePositionBack) {
@@ -483,7 +485,7 @@ static inline double radians (double degrees) {return degrees * M_PI/180;}
 }
 
 - (AVCaptureDeviceInput *)captureDeviceInputForPosition:(AVCaptureDevicePosition)desiredPosition {
-    for (AVCaptureDevice *device in AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)) {
+    for (AVCaptureDevice *device in self.discoverySession.devices) {
         if (device.position == desiredPosition) {
             NSError *error = nil;
             AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device
