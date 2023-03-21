@@ -18,7 +18,7 @@
   "license": "MIT",
   "main": "www/BarcodeScanner.contract.js",
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=16.0.0"
   },
   "scripts": {
     "build": "npm run lint && npm run clean && npm run transpile",
@@ -35,9 +35,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/MobisysGmbH/cordova-plugin-mlkit-barcode-scanner.git"
+    "url": "https://github.com/bi-so-gmbh/cordova-plugin-mlkit-barcode-scanner.git"
   },
-  "homepage": "https://github.com/MobisysGmbH/cordova-plugin-mlkit-barcode-scanner#readme",
+  "homepage": "https://github.com/bi-so-gmbh/cordova-plugin-mlkit-barcode-scanner#readme",
   "devDependencies": {
     "@rollup/plugin-commonjs": "20.0.0",
     "@rollup/plugin-node-resolve": "13.0.4",
