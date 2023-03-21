@@ -27,7 +27,7 @@
 @property(nonatomic, strong) UIImageView *imageView;
 
 @property(nonatomic, strong) AVCaptureSession *session;
-@property(nonatomic, strong) DiscoverySession *discoverySession;
+@property(nonatomic, strong) AVCaptureDeviceDiscoverySession *discoverySession;
 @property(nonatomic, strong) AVCaptureVideoDataOutput *videoDataOutput;
 @property(nonatomic, strong) dispatch_queue_t videoDataOutputQueue;
 @property(nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
@@ -78,7 +78,8 @@
     _videoDataOutputQueue = dispatch_queue_create("VideoDataOutputQueue",
                                                   DISPATCH_QUEUE_SERIAL);
 
-    self.discoverySession = AVCaptureDevice.DiscoverySession.init(deviceTypes: [AVCaptureDeviceType.builtInWideAngleCamera], mediaType:AVMediaTypeVideo, position:AVCaptureDevicePositionUnspecified)
+    NSArray *allTypes = @[AVCaptureDeviceTypeBuiltInDualCamera, AVCaptureDeviceTypeBuiltInWideAngleCamera, AVCaptureDeviceTypeBuiltInTelephotoCamera ];
+    self.discoverySession = [AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:allTypes mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
 
     [self updateCameraSelection];
 
