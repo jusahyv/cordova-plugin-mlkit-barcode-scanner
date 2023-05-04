@@ -27,7 +27,7 @@
     </config-file>
     <config-file target="*-Info.plist"
       parent="CFBundleDevelopmentRegion">
-      <string>de_DE</string>
+      <string>en_US</string>
     </config-file>
     <config-file target="*-Info.plist"
       parent="CFBundleLocalizations">
