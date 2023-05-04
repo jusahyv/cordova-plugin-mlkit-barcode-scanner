@@ -215,9 +215,9 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
 
     findViewById(getResources().getIdentifier("topLayout", "id", getPackageName())).setOnClickListener(listener);
     Snackbar
-        .make(surfaceView, getResources().getIdentifier("permission_camera_rationale", "string", getPackageName()),
+        .make(surfaceView, getResources().getIdentifier("bcode_permission_camera_rationale", "string", getPackageName()),
             Snackbar.LENGTH_INDEFINITE)
-        .setAction(getResources().getIdentifier("ok", "string", getPackageName()), listener).show();
+        .setAction(getResources().getIdentifier("bcode_ok", "string", getPackageName()), listener).show();
 
   }
 
@@ -242,8 +242,8 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
 
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle("Camera permission required")
-        .setMessage(getResources().getIdentifier("no_camera_permission", "string", getPackageName()))
-        .setPositiveButton(getResources().getIdentifier("ok", "string", getPackageName()), listener).show();
+        .setMessage(getResources().getIdentifier("bcode_no_camera_permission", "string", getPackageName()))
+        .setPositiveButton(getResources().getIdentifier("bcode_ok", "string", getPackageName()), listener).show();
   }
 
   @Override
