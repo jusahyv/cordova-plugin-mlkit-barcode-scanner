@@ -46,7 +46,7 @@
       </config>
       <pods use-frameworks="true">
         <pod name="GoogleMLKit/BarcodeScanning"
-          spec="~> 3.2.0" />
+          spec="~> 4.0.0" />
       </pods>
     </podspec>
     <header-file src="src/ios/CDViOSScanner.h" />
